@@ -17,6 +17,7 @@
 # Valores comprendidos entre 3 y 5. Es posible que si el script se ejecuta
 # durante mucho tiempo se sobrepasen estos valores.
 
+import json
 import math
 import os
 import random
@@ -26,6 +27,7 @@ import time
 # Datos se guardan en 'CSV'.
 ROOT = "/var/run/granja"
 CSV  = "{:s}/salinidad.csv".format(ROOT)
+JSON = "{:s}/salinidad.json".format(ROOT)
 
 # Cada 'TICK' segundos, emitir un nuevo valor.
 TICK = 3
@@ -81,18 +83,30 @@ def run(until):
     salinity = 3.80
     now = int(time.time())
 
-    f = open(CSV, "w")
+    csv = open(CSV, "w")
     log("Escribiendo valores de salinidad en {:s}".format(CSV))
+    log("Escribiendo valor actual de salinidad en {:s}".format(JSON))
     while True:
-        string = "{:d}\t{:.6f}\n".format(now, salinity)
-        f.write(string)
-        f.flush()
+        csv_log(csv, now, salinity)
+        json_log(now, salinity)
         time.sleep(TICK)
         salinity = increment(salinity)
         now = int(time.time())
         if until > 0 and until - now <= TICK:
             break
-    f.close()
+    csv.close()
+
+def csv_log(fd, now, salinity):
+    string = "{:d}\t{:.6f}\n".format(now, salinity)
+    fd.write(string)
+    fd.flush()
+
+def json_log(now, salinity):
+    fd = open(JSON, "w")
+    data = {'now': now, 'salinity': salinity}
+    fd.write(json.dumps(data))
+    fd.flush()
+    fd.close()
 
 ensure_dir(ROOT)
 until = parse_args()
