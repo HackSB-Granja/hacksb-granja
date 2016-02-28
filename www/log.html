@@ -49,7 +49,7 @@
 </body>
 
 <script type="text/javascript">
-var HOST_URL = "http://localhost:8082";
+var HOST_URL = "http://172.16.3.77:8082";
 var SALINIDAD_DATA_URL = HOST_URL + "/data/salinidad.csv";
 var INCLINACION_DATA_URL = HOST_URL + "/data/inclinacion.csv";
 var ACELERACION_DATA_URL = HOST_URL + "/data/aceleracion.csv";
@@ -71,7 +71,9 @@ function formatResponse(text) {
     var time = elements[0];
     var value = elements[1];
 
-    var date = new Date(time * 1000).toISOString();
+    // alert("time: " + time);
+    // var date = new Date(time * 1000).toISOString();
+    var date = time;
     ret.push(date + "," + value);
   }
   return ret.join("\n");
