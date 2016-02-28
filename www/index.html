@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"> <head>
   <meta charset="UTF-8">
   <title></title>
 
@@ -37,14 +36,17 @@
       <input name="aceleracion" type="text"></input>
       <span>Magnetismo</span>
       <input name="magnetismo" type="text"></input>
+      <span>Fuga en red</span>
+      <input name="net_monitor" type="text"></input>
     </form>
+    <img id="net_image" src="data/last_camera_reading.jpg"/>
   </div>
 </div>
 
 </body>
 
 <script type="text/javascript">
-var HOST_URL = "http://localhost:8082";
+var HOST_URL = "http://172.16.3.77:8082";
 var PANEL_DATA_URL = HOST_URL + "/data/panel.json"
 
 var PANEL_TICK = 1000; // Refrescar panel cada segundo.
@@ -52,11 +54,17 @@ var PANEL_TICK = 1000; // Refrescar panel cada segundo.
 var panel = document.getElementById("panel");
 
 function refreshPanelUI() {
+  function format(axis) {
+    return "x: " + parseFloat(axis.x) + ", y: " + parseFloat(axis.y) + ", z: " + parseFloat(axis.z);
+  }
   var data = JSON.parse(this.responseText);
-  panel["salinidad"].value = parseFloat(data.salinidad);
-  panel["inclinacion"].value = parseFloat(data.inclinacion);
-  panel["aceleracion"].value = parseFloat(data.aceleracion);
-  panel["magnetismo"].value = parseFloat(data.magnetismo);
+  panel["salinidad"].value = parseFloat(data.salinity.value);
+  panel["inclinacion"].value = format(data.gyroscope);
+  panel["aceleracion"].value = format(data.accelerometer);
+  panel["magnetismo"].value = format(data.magnometer);
+  panel["net_monitor"].value = data.net_monitor.status;
+  var net_image = document.getElementById("net_image");
+  net_image.src = data.net_monitor.picture + "?date=" + (new Date()).getTime();
 }
 
 function clearPanelUI() {
@@ -64,6 +72,7 @@ function clearPanelUI() {
   panel["inclinacion"].value = "";
   panel["aceleracion"].value = "";
   panel["magnetismo"].value = "";
+  panel["net_monitor"].value = "";
 }
 
 function refreshPanel() {
