@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 import time
+import os
 
 import cv2
 
-data_path = '../../data/'
+root = os.environ['PYTHONPATH']
+data_path = root + 'data/'
+
 while(True):
     # Capture frame
     frame = cv2.imread(data_path + 'images/last_camera_reading', 0)

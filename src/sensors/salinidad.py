@@ -28,6 +28,7 @@ import time
 ROOT = "/var/run/granja"
 CSV  = "{:s}/salinidad.csv".format(ROOT)
 JSON = "{:s}/salinidad.json".format(ROOT)
+TXT = "{:s}/salinidad.txt".format(ROOT)
 
 # Cada 'TICK' segundos, emitir un nuevo valor.
 TICK = 3
