@@ -10,20 +10,59 @@ form.panel > span {
   font-weight: bold;
 }
 </style>
-
 </head>
+
 <body>
 
-<form class="panel">
+<form id="panel" class="panel">
   <span>Salinidad</span>
-  <input type="text" value="3.8"></input>
+  <input name="salinidad" type="text"></input>
   <span>Inclinación</span>
-  <input type="text" value="3.8"></input>
+  <input name="inclinacion" type="text"></input>
   <span>Aceleración</span>
-  <input type="text" value="3.8"></input>
+  <input name="aceleracion" type="text"></input>
   <span>Magnetismo</span>
-  <input type="text" value="3.8"></input>
+  <input name="magnetismo" type="text"></input>
 </form>
 
 </body>
-</html>
+
+<script type="text/javascript">
+var HOST_URL = "http://localhost:8082";
+var PANEL_DATA_URL = HOST_URL + "/data/panel.json"
+
+var PANEL_TICK = 1000; // Refrescar panel cada segundo.
+
+var panel = document.getElementById("panel");
+
+function refreshPanelUI() {
+  var data = JSON.parse(this.responseText);
+  panel["salinidad"].value = parseFloat(data.salinidad);
+  panel["inclinacion"].value = parseFloat(data.inclinacion);
+  panel["aceleracion"].value = parseFloat(data.aceleracion);
+  panel["magnetismo"].value = parseFloat(data.magnetismo);
+}
+
+function clearPanelUI() {
+  panel["salinidad"].value = "";
+  panel["inclinacion"].value = "";
+  panel["aceleracion"].value = "";
+  panel["magnetismo"].value = "";
+}
+
+function refreshPanel() {
+  var xhr = new XMLHttpRequest();
+  xhr.addEventListener("load", refreshPanelUI);
+  xhr.open("GET", PANEL_DATA_URL);
+  xhr.send();
+}
+
+function init() {
+  clearPanelUI();
+  window.setInterval(refreshPanel, PANEL_TICK);
+}
+
+init();
+</script>
+
+
