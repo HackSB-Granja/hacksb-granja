@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Lato">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans">
+
+  <link rel="stylesheet" type="text/css" href="css/styles.css">
+
+</head>
+
+<body>
+
+<div class="header">
+  <span style="margin-left: 10px; font-family: Lato; font-size: 48px"><b>Granja</b>Marítima</span>
+  <div class="bar">&nbsp;</div>
+</div>
+
+<div>
+  <div class="left">
+    <div class="menu">
+      <span><a href="index.html">Panel</a></span>
+      <span><a href="alertas.html">Alertas</a></span>
+      <span><a href="log.html">Log</a></span>
+      <span><a href="graficas.html">Gráficas</a></span>
+    </div>
+  </div>
+  <div class="right">
+    <form>
+      <!-- Seleccionar sensor -->
+      <label style="">Sensor</label>
+      <select onchange="loadCSV(this)">
+        <option value="1">Salinidad</option>
+        <option value="2">Inclinacion</option>
+        <option value="3">Aceleracion</option>
+        <option value="4">Magnetismo</option>
+      </select>
+
+      &nbsp;
+
+      <!-- CSV data -->
+      <textarea style="margin-top: 10px; display: block" id="csv-data" cols="120" rows="30" readonly></textarea>
+    </form>
+  </div>
+</div>
+
+</body>
+
+<script type="text/javascript">
+var HOST_URL = "http://localhost:8082";
+var SALINIDAD_DATA_URL = HOST_URL + "/data/salinidad.csv";
+var INCLINACION_DATA_URL = HOST_URL + "/data/inclinacion.csv";
+var ACELERACION_DATA_URL = HOST_URL + "/data/aceleracion.csv";
+var MAGNETISMO_DATA_URL = HOST_URL + "/data/magnetismo.csv";
+
+var PANEL_TICK = 1000; // Refrescar panel cada segundo.
+
+var selected_url = SALINIDAD_DATA_URL;
+
+var textarea = document.getElementById("csv-data");
+
+function formatResponse(text) {
+  var ret = new Array();
+  var lines = text.split("\n");
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i];
+    if (!line) continue;
+    var elements = line.split("\t");
+    var time = elements[0];
+    var value = elements[1];
+
+    var date = new Date(time * 1000).toISOString();
+    ret.push(date + "," + value);
+  }
+  return ret.join("\n");
+}
+
+function refreshUI() {
+  var text = this.responseText;
+  if (text == null || text.length == 0)
+    return;
+  textarea.value = formatResponse(text);
+}
+
+function clearUI() {
+  textarea.value = "";
+}
+
+function refreshCSV() {
+  var xhr = new XMLHttpRequest();
+  xhr.addEventListener("load", refreshUI);
+  xhr.open("GET", selected_url);
+  xhr.send();
+}
+
+function init() {
+  clearUI();
+  window.setInterval(refreshCSV, PANEL_TICK);
+}
+
+init();
+</script>
