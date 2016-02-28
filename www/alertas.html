@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Alertas</title>
+
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Lato">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans">
+
+  <link rel="stylesheet" type="text/css" href="css/styles.css">
+
+</head>
+
+<body>
+
+<div class="header">
+  <span style="margin-left: 10px; font-family: Lato; font-size: 48px"><b>Granja</b>Marítima</span>
+  <div class="bar">&nbsp;</div>
+</div>
+
+<div>
+  <div class="left">
+    <div class="menu">
+      <span><a href="index.html">Panel</a></span>
+      <span><a href="alertas.html">Alertas</a></span>
+      <span><a href="log.html">Log</a></span>
+      <span><a href="graficas.html">Gráficas</a></span>
+    </div>
+  </div>
+  <div class="right" >
+
+    <!-- Sensores -->
+    <form id="panel" class="panel" style="float: left">
+      <span>Salinidad</span>
+      <input name="salinidad" type="text"></input>
+      <span>Inclinación</span>
+      <input name="inclinacion" type="text"></input>
+      <span>Aceleración</span>
+      <input name="aceleracion" type="text"></input>
+      <span>Magnetismo</span>
+      <input name="magnetismo" type="text"></input>
+    </form>
+
+    <!-- Acciones -->
+    <form id="panel-actions" class="panel" style="margin-left: 75px; float: left">
+      <span>Acción</span>
+      <select name="salinidad" style="width: 200px" onchange="focusOn('salinidad');">
+        <option value="1">Enviar email</option>
+        <option value="2">Activar GPIO</option>
+      </select>
+      <span>&nbsp;</span>
+      <select name="inclinacion" style="width: 200px" onselect="focusOn('inclinacion');">
+        <option value="1">Enviar email</option>
+        <option value="2">Activar GPIO</option>
+      </select>
+      <span>&nbsp;</span>
+      <select name="aceleracion" style="width: 200px" onselect="focusOn('aceleracion');">
+        <option value="1">Enviar email</option>
+        <option value="2">Activar GPIO</option>
+      </select>
+      <span>&nbsp;</span>
+      <select name="magnetismo" style="width: 200px" onselect="focusOn('magnetismo');">
+        <option value="1">Enviar email</option>
+        <option value="2">Activar GPIO</option>
+      </select>
+    </form>
+
+    <!-- Valores -->
+    <form id="panel-values" class="panel" style="margin-left: 75px; float: left">
+      <span>Valor</span>
+      <input name="salinidad" type="text" value="admin@granjamaritima.com"></input>
+      <span>&nbsp;</span>
+      <input name="inclinacion" type="text" value="admin@granjamaritima.com"></input>
+      <span>&nbsp;</span>
+      <input name="aceleracion" type="text" value="admin@granjamaritima.com"></input>
+      <span>&nbsp;</span>
+      <input name="magnetismo" type="text" value="admin@granjamaritima.com"></input>
+    </form>
+  </div>
+</div>
+
+</body>
+
+<script type="text/javascript">
+
+function focusOn(name) {
+  var form = document.getElementById('panel-values');
+  form[name].value = "";
+  form[name].focus();
+}
+</script>
