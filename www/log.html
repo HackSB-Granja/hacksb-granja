@@ -71,7 +71,6 @@ function formatResponse(text) {
     var time = elements[0];
     var value = elements[1];
 
-    alert("time: " + time);
     var date = new Date(time * 1000).toISOString();
     ret.push(date + "," + value);
   }
